@@ -399,6 +399,16 @@ int main(void)
     int rc;
     FIH_DECLARE(fih_rc, FIH_FAILURE);
 
+#ifdef CONFIG_BOARD_BCU_HANA
+    /* Add a delay at boot time because bcu_hana board has a delay between the
+     * 3.3v MCU and the 3.3v peripheral. This delay is about 50/60ms at the
+     * oscilloscope so it's reasonnable to wait 100ms prior to any initialization.
+     * We need to do it only on BCU_HANA board, as we share the same bootloader
+     * code for the VCU firmware.
+     */
+    k_msleep(100);
+#endif /* CONFIG_BOARD_BCU_HANA */
+
     MCUBOOT_WATCHDOG_SETUP();
     MCUBOOT_WATCHDOG_FEED();
 
